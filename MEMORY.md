@@ -4,6 +4,7 @@
 
 ### 核心框架
 - [全屏网页幻灯片框架](web_slideshow_framework.md) - **HTML 演示系统，替代 PPT** ⭐
+  - **Frontend-Slides 技能**: 12种预设风格，强制视口适配，零依赖
 - [PPT/网页设计风格库](ppt_design_styles.md) - **主流设计风格速查** ⭐
 - [科幻风格模板](scifi_style_template.md) - **Sci-Fi 风格模板，AI/科技演示** ⭐
 
@@ -163,6 +164,72 @@ uipro init --ai claude
 
 ---
 
+### 2026-03-01: Frontend-Slides 技能学习与整合
+
+**技能路径**: `C:\Users\31681\.claude\skills\frontend-slides`
+
+**12种预设风格**:
+| 风格 | 适用场景 | 关键特征 |
+|------|----------|----------|
+| **Bold Signal** | 路演、发布会 | 炭黑+热橙，超大数字 |
+| **Electric Studio** | 客户演示 | 黑白+钴蓝，双面板分屏 |
+| **Neon Cyber** | AI/开发工具 | 青色+洋红，光晕粒子 |
+| **Terminal Green** | API/CLI工具 | 终端绿，扫描线效果 |
+| **Dark Botanical** | 奢侈品牌 | 模糊圆圈，细线，克制 |
+| **Creative Voltage** | 创意工作室 | 半点纹理，徽章，强对比 |
+| **Notebook Tabs** | 报告/评审 | 纸张，彩色标签，活页细节 |
+| **Pastel Geometry** | 产品概览 | 垂直药丸，圆角卡，软阴影 |
+| **Split Pastel** | 机构介绍 | 分割背景，圆角标签 |
+| **Vintage Editorial** | 个人品牌 | 几何装饰，边框引用 |
+| **Swiss Modern** | 企业/数据 | 可见网格，不对称 |
+| **Paper & Ink** | 散文/宣言 | 拉引语，首字下沉 |
+
+**强制性技术规范**:
+```css
+/* 视口适配 - 不可协商 */
+.slide {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;  /* 动态视口 */
+    overflow: hidden;
+}
+
+/* 响应式字号 */
+--title-size: clamp(2rem, 6vw, 5rem);
+--h2-size: clamp(1.25rem, 3.5vw, 2.5rem);
+--body-size: clamp(0.875rem, 1.5vw, 1.25rem);
+```
+
+**内容密度限制**:
+- 标题页: 1标题 + 1副标题
+- 内容页: 1标题 + 4-6要点
+- 代码页: 8-10行最多
+- 特性网格: 6卡片最多
+
+**心情 → 风格映射**:
+- 印象/自信 → Bold Signal, Electric Studio
+- 兴奋/活力 → Neon Cyber, Creative Voltage
+- 平静/专注 → Notebook Tabs, Swiss Modern
+- 受启发/感动 → Dark Botanical, Vintage Editorial
+
+**完整导航**:
+- 键盘: ← → 方向键，F 全屏
+- 触摸: 滑动翻页
+- 滚轮: 节流滚动翻页
+- 点状导航: 右侧跳转
+
+**可访问性**:
+- `prefers-reduced-motion` 尊重用户偏好
+- 语义化 HTML (main, section, nav)
+- 键盘导航支持
+- 对比度 ≥ 4.5:1
+
+**示例文件**: `C:\Users\31681\Desktop\test\ppt_master_intro_neon.html`
+
+**更新文档**: `web_slideshow_framework.md` 新增 "Frontend-Slides 技能整合" 章节
+
+---
+
 ### 2026-03-01: 科幻风格模板存储
 
 **模板文件**: `C:\Users\31681\Desktop\test\html_slideshow_framework_scifi.html`
@@ -183,6 +250,50 @@ uipro init --ai claude
 **模板文档**: `scifi_style_template.md` - 完整设计要素提取
 
 **重要**: 以后生成科技/AI相关演示时，优先使用此科幻风格模板
+
+---
+
+### 2026-03-01: 大教室投影核心原则（重要更新）
+
+**问题**: 之前的幻灯片在大教室演示时，后排学生看不清
+
+**核心原则**:
+1. **超大字体** - 标题 80-160px，确保后排可见
+2. **图片为主** - 大图标/emoji 占主要空间
+3. **文字精炼** - 只有关键词，每页 <100 字
+4. **画幅填满** - 2×2/3×2 大板块布局，无空白
+5. **视觉冲击力** - 充实、鲜艳、有动画
+
+**关键技术**:
+- 使用 `clamp(50px, 10vw, 160px)` 响应式超大字体
+- 使用 `dvh` 动态视口高度替代 `vh`
+- 使用 `min(80px, 6dvh)` 响应式边距控制
+- `justify-content: flex-start` 防止内容顶部被裁剪
+- 4K 优化：根字体缩放 + 字体渲染优化
+
+**边距溢出控制**:
+```css
+/* ❌ 错误：垂直居中会导致内容被裁剪 */
+.slide { justify-content: center; padding: 60px; }
+
+/* ✅ 正确：从顶部开始 + 动态边距 */
+.slide {
+  justify-content: flex-start;
+  padding: min(80px, 6dvh) min(40px, 4vw);
+  overflow-y: auto;
+}
+```
+
+**特效组件**:
+- 粒子效果 - 50个浮动粒子，三种颜色
+- 光晕脉冲 - 2个大光球，呼吸动画
+- 移动网格背景 - 持续移动
+- 扫描线效果 - CRT 复古风格
+- 3D 卡片悬停 - perspective + rotate
+
+**示例文件**: `C:\Users\31681\Desktop\test\ppt_master_final.html`
+
+**更新文档**: `web_slideshow_framework.md` 新增 "大教室投影核心原则" 章节
 
 ---
 

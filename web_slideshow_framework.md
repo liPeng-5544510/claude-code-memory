@@ -10,13 +10,14 @@
 | 特点 | 说明 |
 |------|------|
 | **真·全屏** | 100vw × 100vh，F 键切换全屏 |
-| **超大字体** | 标题 60-100px，适合大教室投影 |
-| **丰富动画** | 元素进入、页面切换、脉冲效果 |
+| **超大字体** | 标题 80-160px（clamp响应式），适合大教室投影 |
+| **图片为主** | 大图标/emoji 占据主要空间，文字精炼 |
+| **画幅填满** | 每页充实，无空白，有视觉冲击力 |
+| **丰富动画** | 粒子、光晕、悬停3D效果 |
 | **键盘控制** | 方向键翻页、F 全屏、N 备注等 |
 | **演讲备注** | 按 N 键显示演讲者备注/讲稿 |
-| **进度指示** | 页码、进度条、点状指示器 |
-| **配置驱动** | 支持 config.json 快速切换主题 |
-| **易于扩展** | 模块化设计，添加新页面只需复制结构 |
+| **进度指示** | 页码、进度条 |
+| **4K优化** | 高清分辨率适配，文字清晰锐利 |
 
 ---
 
@@ -926,3 +927,469 @@ const UI_CHECKS = {
 ### 完整示例文件
 
 参考: `C:\Users\31681\Desktop\test\html_slideshow_framework_uipro.html`
+
+---
+
+## Frontend-Slides 技能整合
+
+> 技能路径: `C:\Users\31681\.claude\skills\frontend-slides`
+> 零依赖、动画丰富的 HTML 演示系统，完全在浏览器中运行
+
+### 核心原则（不可协商）
+
+| 原则 | 说明 |
+|------|------|
+| **零依赖** | 单个 HTML 文件，内联 CSS/JS |
+| **视口适配强制** | 每页 100vh，无滚动，overflow: hidden |
+| **展示而非讲述** | 使用视觉预览而非抽象问卷 |
+| **独特设计** | 避免通用紫色渐变、Inter白底模板 |
+| **生产级质量** | 代码注释、可访问性、响应式、高性能 |
+
+### 12 种预设风格
+
+| 风格 | 氛围 | 适用场景 | 配色 | 字体 |
+|------|------|----------|------|------|
+| **Bold Signal** | 自信、高冲击力 | 路演、发布会 | 炭黑+热橙+白 | Archivo Black + Space Grotesk |
+| **Electric Studio** | 干净、大胆 | 客户演示、战略评审 | 黑+白+钴蓝 | Manrope |
+| **Creative Voltage** | 活力、复古现代 | 创意工作室、品牌 | 电蓝+霓虹黄+深海军 | Syne + Space Mono |
+| **Dark Botanical** | 优雅、高端 | 奢侈品牌、深度叙事 | 近黑+象牙白+腮红+金 | Cormorant + IBM Plex Sans |
+| **Neon Cyber** | 未来感、科技 | AI、基础设施、开发工具 | 午夜海军+青+洋红 | Clash Display + Satoshi |
+| **Terminal Green** | 开发者、黑客极客 | API、CLI工具 | GitHub暗+终端绿 | JetBrains Mono |
+| **Notebook Tabs** | 编辑、有序 | 报告、评审、结构化叙事 | 奶油纸+炭灰+粉彩标签 | Bodoni Moda + DM Sans |
+| **Pastel Geometry** | 亲和、现代友好 | 产品概览、入职培训 | 淡蓝+奶油卡片+粉/薄荷 | Plus Jakarta Sans |
+| **Split Pastel** | 俏皮、现代创意 | 机构介绍、工作坊 | 桃+ lavender 分割+薄荷徽章 | Outfit |
+| **Vintage Editorial** | 机智、个性驱动 | 个人品牌、观点表达 | 奶油+炭灰+尘暖色 | Fraunces + Work Sans |
+| **Swiss Modern** | 极简、精确、数据优先 | 企业、产品策略、分析 | 白+黑+信号红 | Archivo + Nunito |
+| **Paper & Ink** | 文学、深思熟虑 | 散文、主题演讲、宣言 | 暖奶油+炭灰+深红 | Cormorant Garamond + Source Serif 4 |
+
+### 心情 → 风格映射
+
+| 期望感觉 | 推荐风格 |
+|----------|----------|
+| 印象深刻/自信 | Bold Signal, Electric Studio, Dark Botanical |
+| 兴奋/充满活力 | Creative Voltage, Neon Cyber, Split Pastel |
+| 平静/专注 | Notebook Tabs, Paper & Ink, Swiss Modern |
+| 受启发/感动 | Dark Botanical, Vintage Editorial, Pastel Geometry |
+
+### 强制性视口适配 CSS
+
+```css
+/* 必须复制到每个演示文稿 */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+html {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+}
+
+.slide {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;  /* 动态视口高度 */
+    overflow: hidden;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+}
+
+.slide-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 100%;
+    overflow: hidden;
+    padding: var(--slide-padding);
+}
+```
+
+### 响应式字号系统（使用 clamp()）
+
+```css
+:root {
+    --title-size: clamp(2rem, 6vw, 5rem);
+    --h2-size: clamp(1.25rem, 3.5vw, 2.5rem);
+    --body-size: clamp(0.875rem, 1.5vw, 1.25rem);
+    --slide-padding: clamp(1.5rem, 4vw, 5rem);
+}
+```
+
+### 内容密度限制
+
+| 幻灯片类型 | 最大内容 |
+|------------|----------|
+| 标题页 | 1标题 + 1副标题 + 可选标语 |
+| 内容页 | 1标题 + 4-6要点 或 2短段落 |
+| 特性网格 | 6个卡片最多 |
+| 代码页 | 8-10行最多 |
+| 图片页 | 1图片，最好<60vh |
+
+### 高度断点处理
+
+```css
+@media (max-height: 700px) { --slide-padding: clamp(1rem, 3vw, 2.5rem); }
+@media (max-height: 600px) { --slide-padding: clamp(0.75rem, 2.5vw, 2rem); }
+@media (max-height: 500px) { --slide-padding: clamp(0.5rem, 2vw, 1.5rem); }
+```
+
+### Intersection Observer 入场动画
+
+```javascript
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.reveal').forEach(el => {
+                el.classList.add('visible');
+            });
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.slide').forEach(slide => observer.observe(slide));
+```
+
+### 完整导航控制
+
+```javascript
+// 键盘
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') goToNext();
+    if (e.key === 'ArrowLeft') goToPrev();
+    if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+});
+
+// 触摸滑动
+let touchStartX = 0;
+document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+document.addEventListener('touchend', e => {
+    const deltaX = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(deltaX) > 50) deltaX > 0 ? goToPrev() : goToNext();
+});
+
+// 滚轮（节流）
+let wheelTimeout;
+document.addEventListener('wheel', (e) => {
+    if (wheelTimeout) return;
+    wheelTimeout = setTimeout(() => wheelTimeout = null, 100);
+    if (Math.abs(e.deltaY) > 30) {
+        e.deltaY > 0 ? goToNext() : goToPrev();
+    }
+}, { passive: false });
+```
+
+### 可访问性支持
+
+```css
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+    html { scroll-behavior: auto; }
+}
+```
+
+### 工作流程
+
+1. **检测模式** - 新演示 / PPT转换 / 增强
+2. **发现内容** - 目的、长度、内容状态
+3. **发现风格** - 生成3个单页预览文件让用户选择
+4. **构建演示** - 输出 presentation.html
+5. **强制执行视口适配** - 每页必须100vh，内容过多则拆分
+6. **验证** - 在多种尺寸测试无溢出
+7. **交付** - 删除预览文件，打开演示，总结文件信息
+
+### 验证尺寸
+
+桌面: 1920x1080, 1440x900, 1280x720
+平板: 1024x768, 768x1024
+手机: 375x667, 414x896, 667x375
+
+### 反模式（避免）
+
+- ❌ 紫色白底启动模板
+- ❌ Inter/Roboto/Arial 作为视觉声音
+- ❌ 长列表墙、小字号、需滚动的代码块
+- ❌ 固定高度内容盒在短屏幕上崩溃
+- ❌ 无效否定 CSS 函数如 `-clamp(...)`
+
+### 示例文件
+
+- `C:\Users\31681\Desktop\test\ppt_master_intro_neon.html` - Neon Cyber 风格
+- 技能路径: `C:\Users\31681\.claude\skills\frontend-slides\`
+
+---
+
+## 大教室投影核心原则（2026-03-01 更新）
+
+> **最重要**：大教室演示的首要目标是让后排学生能看清
+
+### 核心设计原则
+
+| 原则 | 说明 | 错误示范 |
+|------|------|----------|
+| **超大字体** | 标题 80-160px，确保后排可见 | 标题小于 60px |
+| **图片为主** | 大图标/emoji 占主要空间 | 文字堆砌 |
+| **文字精炼** | 只有关键词，每页<100字 | 长段落、详细说明 |
+| **画幅填满** | 2×2/3×2 大板块布局 | 留大量空白 |
+| **视觉冲击力** | 充实、鲜艳、有动画 | 简洁、空旷 |
+
+### 字体大小规范（大教室）
+
+```css
+/* 使用 clamp() 实现响应式超大字体 */
+.mega-title {
+  /* 封面标题：最小 50px，首选 10vw，最大 160px */
+  font-size: clamp(50px, 10vw, 160px);
+}
+
+.section-title {
+  /* 页面标题：最小 36px，首选 6vw，最大 90px */
+  font-size: clamp(36px, 6vw, 90px);
+}
+
+.panel-title {
+  /* 卡片标题：最小 28px，首选 3.5vw，最大 50px */
+  font-size: clamp(28px, 3.5vw, 50px);
+}
+
+.panel-text {
+  /* 卡片正文：最小 20px，首选 2.2vw，最大 32px */
+  font-size: clamp(20px, 2.2vw, 32px);
+}
+```
+
+### 图标大小规范
+
+```css
+/* 面板图标 */
+.panel-icon {
+  font-size: clamp(70px, 8vw, 130px);
+}
+
+/* 流程圆圈内的图标 */
+.flow-circle {
+  font-size: clamp(50px, 6vw, 100px);
+}
+
+/* 角色卡片图标 */
+.role-icon {
+  font-size: clamp(60px, 7vw, 110px);
+}
+```
+
+---
+
+## 边距与溢出控制（2026-03-01）
+
+### 问题：内容被裁剪
+
+**错误做法**：
+```css
+/* ❌ 垂直居中会导致内容过高时顶部被裁剪 */
+.slide {
+  justify-content: center;
+  padding: 60px;
+}
+```
+
+**正确做法**：
+```css
+/* ✅ 从顶部开始排列 + 动态 padding */
+.slide {
+  justify-content: flex-start;
+  padding: min(80px, 6dvh) min(40px, 4vw);
+  overflow-y: auto;  /* 防止意外溢出 */
+  overflow-x: hidden;
+}
+```
+
+### 响应式 Padding 最佳实践
+
+```css
+/* 使用 min() 确保在大屏幕上也不会太小 */
+.padding-large { padding: min(80px, 6dvh) min(40px, 4vw); }
+.padding-medium { padding: min(50px, 4dvh) min(30px, 3vw); }
+.padding-small { padding: min(40px, 3dvh) min(20px, 2vw); }
+
+/* 网格间距 */
+.grid-gap { gap: min(35px, 2.5vw); }
+```
+
+### 视口高度单位选择
+
+| 单位 | 说明 | 推荐场景 |
+|------|------|----------|
+| `vh` | 视口高度 | 固定场景 |
+| `dvh` | **动态视口高度** | **推荐**（适配移动端地址栏） |
+| `vh` + `min()` | 响应式高度 | 大教室投影 |
+
+```css
+/* 推荐：使用 dvh 适配动态视口 */
+.slideshow-container {
+  height: 100dvh;
+}
+
+.slide {
+  padding: min(80px, 6dvh) min(40px, 4vw);
+}
+```
+
+---
+
+## 4K 高清优化（2026-03-01）
+
+### 根字体缩放
+
+```css
+/* 4K 显示器自动放大字体 */
+html { font-size: 16px; }
+
+@media (min-width: 2560px), (min-resolution: 144dpi) {
+  html { font-size: 20px; }  /* 4K 放大 25% */
+}
+
+@media (min-width: 3840px) {
+  html { font-size: 28px; }  /* 5K 放大 75% */
+}
+```
+
+### 字体渲染优化
+
+```css
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+```
+
+### 4K 专用样式
+
+```css
+@media (min-width: 2560px) {
+  .slide {
+    padding: min(100px, 5dvh) min(60px, 5vw);
+  }
+  .section-title {
+    margin-bottom: min(60px, 5dvh);
+  }
+  .panel {
+    padding: min(50px, 4vw);
+  }
+}
+```
+
+---
+
+## 科幻风格特效（2026-03-01）
+
+### 背景动画层
+
+```css
+/* 1. 移动网格背景 */
+body::before {
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 15s linear infinite;
+}
+
+/* 2. 扫描线效果 */
+body::after {
+  background: repeating-linear-gradient(
+    0deg, rgba(0,0,0,0.1) 0px, transparent 1px, transparent 4px
+  );
+}
+
+/* 3. 光晕脉冲 */
+.glow {
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  filter: blur(200px);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+/* 4. 浮动粒子 */
+.particle {
+  width: 4px; height: 4px;
+  background: #00E5FF;
+  box-shadow: 0 0 15px #00E5FF, 0 0 30px #00E5FF;
+  animation: particleFloat 20s linear infinite;
+}
+```
+
+### 3D 卡片悬停效果
+
+```css
+.panel {
+  perspective: 1000px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.panel:hover {
+  transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+  box-shadow: 0 20px 60px rgba(0, 229, 255, 0.4);
+}
+```
+
+### 发光标题动画
+
+```css
+.mega-title {
+  background: linear-gradient(135deg, #00E5FF, #A855F7, #EC4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { filter: drop-shadow(0 0 40px rgba(0, 229, 255, 0.7)); }
+  50% { filter: drop-shadow(0 0 70px rgba(168, 85, 247, 0.9)); }
+}
+```
+
+---
+
+## 制作流程检查清单（2026-03-01）
+
+### 完成前必须检查
+
+- [ ] **字体够大** - 标题 > 80px，正文 > 20px
+- [ ] **无内容溢出** - 每页在视口内完整显示
+- [ ] **图标够大** - emoji > 60px
+- [ ] **画幅填满** - 无大量空白
+- [ ] **文字精炼** - 每页 < 100 字
+- [ ] **图片为主** - 图标占主要空间
+- [ ] **动画流畅** - 不影响阅读
+- [ ] **全屏测试** - 按 F 测试全屏效果
+
+### 浏览器测试
+
+```bash
+# 自动打开测试
+start "" presentation.html
+```
+
+测试尺寸：
+- 1920×1080 (标准 Full HD)
+- 2560×1440 (2K)
+- 3840×2160 (4K)
+
+---
+
+## 更新日志（新增）
+
+- 2026-03-01: 大教室投影核心原则
+  - 超大字体规范（80-160px 标题）
+  - 图片为主、文字精炼原则
+  - 画幅填满、视觉冲击力要求
+  - 边距与溢出控制最佳实践
+  - 4K 高清优化
+  - 科幻风格特效（粒子、光晕、3D卡片）
+  - 使用 `dvh` 替代 `vh`
+  - 使用 `min()` 响应式控制 padding
