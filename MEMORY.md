@@ -9,6 +9,19 @@
 
 ### 外部工具
 - [UI-UX-Pro-Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) - **UI/UX 设计系统生成器** (npm: uipro-cli)
+- [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) - **Anthropic 黑客松冠军配置** (已安装到 `~/.claude/`)
+
+### GitHub 仓库
+- **记忆仓库**: https://github.com/liPeng-5544510/claude-code-memory
+  - 路径: `C:\Users\31681\Desktop\claude-code-memory`
+  - **重要**: 当用户说"更新记忆"或"上传"时，自动执行：
+    ```bash
+    cp C:\Users\31681\.claude\projects\C--Users-31681-Desktop-test\memory\* C:\Users\31681\Desktop\claude-code-memory\
+    cd C:\Users\31681\Desktop\claude-code-memory
+    git add .
+    git commit -m "update memory"
+    git push
+    ```
 
 ### 专项经验
 - [浏览器书签清理](browser_bookmark_cleanup.md) - 处理云端同步问题
@@ -20,6 +33,30 @@
 ---
 
 ## 最近工作
+
+### 2026-03-01: GitHub 记忆仓库建立
+
+**工作内容**: 创建 GitHub 仓库存储 Claude Code 记忆文件
+
+**仓库信息**:
+- URL: https://github.com/liPeng-5544510/claude-code-memory
+- 本地路径: `C:\Users\31681\Desktop\claude-code-memory`
+
+**自动更新命令**:
+```bash
+# 复制记忆文件
+cp C:\Users\31681\.claude\projects\C--Users-31681-Desktop-test\memory\* C:\Users\31681\Desktop\claude-code-memory\
+
+# 提交并推送
+cd C:\Users\31681\Desktop\claude-code-memory
+git add .
+git commit -m "update memory"
+git push
+```
+
+**触发词**: "更新记忆"、"上传"、"同步"
+
+---
 
 ### 2026-02-28: 设计风格库完整版 (21种风格)
 
